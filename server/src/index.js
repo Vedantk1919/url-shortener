@@ -13,8 +13,8 @@ app.use(cors({
 
     const allowedOrigins = [
       'http://localhost:5173', 
-      'http://localhost:3000', 
-      'https://shorten-url-vcit.onrender.com', 
+      'https://url-shortener-cdprqlg7i-vedants-projects-6f6d5301.vercel.app', 
+      'https://url-shortener-ymc2.onrender.com', 
     ];
 
     if (allowedOrigins.indexOf(origin) !== -1) {
