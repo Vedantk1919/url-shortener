@@ -16,7 +16,7 @@ A full-stack MERN application that allows users to shorten URLs, generate QR cod
 
 ## 🚀 Live Demo
 
-- **Frontend:** [https://url-shortener-cdprqlg7i-vedants-projects-6f6d5301.vercel.app](https://url-shortener-cdprqlg7i-vedants-projects-6f6d5301.vercel.app)
+- **Frontend:** [https://url-shortener-sand-eight.vercel.app/](https://url-shortener-sand-eight.vercel.app/)
 - **Backend API:** [https://url-shortener-ymc2.onrender.com](https://url-shortener-ymc2.onrender.com)
 
 ## 🛠️ Tech Stack
