@@ -1,5 +1,3 @@
-//added qr code generation
-
 import React, { useState } from "react";
 import axios from 'axios'; 
 import {
@@ -20,6 +18,9 @@ import {
 } from "@chakra-ui/react";
 import styles from './InputForm.module.css';
 import { useAuth } from '../context/AuthContext';
+
+// 👇 THIS IS THE FIX: Define your Backend URL here
+const BACKEND_URL = "https://url-shortener-ymc2.onrender.com";
 
 export const InputForm = () => {
     const [input, setInput] = useState({ longUrl: "", urlCode: "" });
@@ -64,7 +65,8 @@ export const InputForm = () => {
 
         setIsloading(true);
         try {
-            const res = await axios.post('/api/url/shorten', input);
+            // 👇 FIX: Use the full Backend URL here
+            const res = await axios.post(`${BACKEND_URL}/api/url/shorten`, input);
 
             if (res.status) {
                 let data = res.data;
