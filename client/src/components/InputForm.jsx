@@ -14,12 +14,13 @@ import {
     InputLeftAddon,
     Image,
     useToast,
-    Text
+    Text,
+    VStack // Added VStack for better spacing
 } from "@chakra-ui/react";
 import styles from './InputForm.module.css';
 import { useAuth } from '../context/AuthContext';
 
-// 👇 THIS IS THE FIX: Define your Backend URL here
+// Your Backend URL
 const BACKEND_URL = "https://url-shortener-ymc2.onrender.com";
 
 export const InputForm = () => {
@@ -29,9 +30,11 @@ export const InputForm = () => {
     const [isLoading, setIsloading] = useState(false);
     const [isError, setIsError] = useState(false);
     const { hasCopied, onCopy } = useClipboard(url);
-    const clientBaseUrl = window.location.href;
     const { user } = useAuth();
     const toast = useToast();
+
+    // Cleaned up: We don't need the full window location in the UI anymore
+    // const clientBaseUrl = window.location.href; 
 
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -65,7 +68,6 @@ export const InputForm = () => {
 
         setIsloading(true);
         try {
-            // 👇 FIX: Use the full Backend URL here
             const res = await axios.post(`${BACKEND_URL}/api/url/shorten`, input);
 
             if (res.status) {
@@ -92,103 +94,113 @@ export const InputForm = () => {
 
     return (
         <Box
-            width={"40%"}
+            width={["90%", "80%", "50%"]} // Better responsiveness (mobile vs desktop)
             margin={"auto"}
-            boxShadow="dark-lg"
-            p="6"
+            boxShadow="xl" // Nicer shadow
+            p="8"
             rounded="2xl"
-            bg="dark"
-            className={styles.mainContainer}
+            bg="gray.800" // Hardcoded dark theme for cleaner look
+            color="white"
         >
             {!user && (
-                <Text color="orange.300" mb={4} fontSize="sm">
-                    🔐 Login required to shorten URLs
-                </Text>
-            )}
-
-            <FormControl isInvalid={isError}>
-                <FormLabel>Convert long URLs into shortened versions with a single click.</FormLabel>
-                <Input
-                    id="longUrl"
-                    type="url"
-                    value={input.longUrl}
-                    placeholder="Paste here your long URL"
-                    onChange={handleInputChange}
-                    onKeyDown={handleEnter}
-                    isDisabled={!user}
-                />
-                {!isError ? (
-                    <FormHelperText>Enter your Long Url</FormHelperText>
-                ) : (
-                    <FormErrorMessage>URL is required.</FormErrorMessage>
-                )}
-            </FormControl>
-
-            <FormLabel mt={7} fontSize='md'>Create personalized and memorable links (Optional)</FormLabel>
-            <InputGroup size='md' className={styles.InputGroup}>
-                <InputLeftAddon children={`${clientBaseUrl}`} className={styles.BaseUrlAddon} w='50%' />
-                <Input
-                    placeholder='your personalized code '
-                    id="urlCode"
-                    type="text"
-                    value={input.urlCode}
-                    onChange={handleInputChange}
-                    w='50%'
-                    onKeyDown={handleEnter}
-                    isDisabled={!user}
-                />
-            </InputGroup>
-
-            <Button
-                type="submit"
-                colorScheme="blue"
-                m={5}
-                onClick={handleSubmit}
-                isLoading={isLoading}
-                loadingText='Submitting'
-                isDisabled={!user}
-            >
-                {user ? 'Submit' : 'Please Login'}
-            </Button>
-
-            {url && (
-                <Flex direction="column" gap={3}>
-                    <Flex mb={2}>
-                        <Input value={url} isReadOnly placeholder="Short Url" />
-                        <Button onClick={onCopy} ml={2}>
-                            {hasCopied ? "Copied" : "Copy"}
-                        </Button>
-                    </Flex>
-
-                    {/* ✅ QR Code */}
-                    {shortUrlData?.qrCode && (
-                        <Flex direction="column" align="center">
-                            <Text mb={2}>QR Code:</Text>
-                            <Image
-                                src={shortUrlData.qrCode}
-                                alt="QR Code"
-                                boxSize="150px"
-                                border="1px solid"
-                                borderColor="gray.200"
-                                p={2}
-                                bg="white"
-                            />
-                            <Button
-                                size="sm"
-                                mt={2}
-                                onClick={() => {
-                                    const link = document.createElement('a');
-                                    link.href = shortUrlData.qrCode;
-                                    link.download = `qr-${shortUrlData.urlCode}.png`;
-                                    link.click();
-                                }}
-                            >
-                                Download QR Code
-                            </Button>
-                        </Flex>
-                    )}
+                <Flex justify="center" mb={4}>
+                    <Text color="orange.300" fontSize="sm" fontWeight="bold">
+                        🔒 Login required to shorten URLs
+                    </Text>
                 </Flex>
             )}
+
+            <VStack spacing={6}> {/* Adds consistent spacing between items */}
+                
+                <FormControl isInvalid={isError}>
+                    <FormLabel fontWeight="bold">Paste your long URL</FormLabel>
+                    <Input
+                        id="longUrl"
+                        type="url"
+                        size="lg" // Larger, easier to click
+                        value={input.longUrl}
+                        placeholder="https://example.com/very-long-link..."
+                        onChange={handleInputChange}
+                        onKeyDown={handleEnter}
+                        isDisabled={!user}
+                        bg="gray.700"
+                        border="none"
+                        _focus={{ border: "2px solid #3182ce" }}
+                    />
+                    {isError && <FormErrorMessage>URL is required.</FormErrorMessage>}
+                </FormControl>
+
+                <FormControl>
+                    <FormLabel fontWeight="bold">Custom Alias (Optional)</FormLabel>
+                    <InputGroup size='lg'>
+                        {/* 👇 CLEANER: Just show a slash, not the whole ugly URL */}
+                        <InputLeftAddon children="/" bg="gray.600" color="gray.300" />
+                        <Input
+                            placeholder='my-brand-name'
+                            id="urlCode"
+                            type="text"
+                            value={input.urlCode}
+                            onChange={handleInputChange}
+                            onKeyDown={handleEnter}
+                            isDisabled={!user}
+                            bg="gray.700"
+                            border="none"
+                            _focus={{ border: "2px solid #3182ce" }}
+                        />
+                    </InputGroup>
+                    <FormHelperText color="gray.400">
+                        Leave empty for a random code.
+                    </FormHelperText>
+                </FormControl>
+
+                <Button
+                    type="submit"
+                    colorScheme="blue"
+                    size="lg"
+                    width="full" // Full width button looks better
+                    onClick={handleSubmit}
+                    isLoading={isLoading}
+                    loadingText='Shortening...'
+                    isDisabled={!user}
+                    mt={2}
+                >
+                    {user ? 'Shorten URL' : 'Please Login'}
+                </Button>
+
+                {url && (
+                    <Box w="full" bg="gray.900" p={4} rounded="md" border="1px solid" borderColor="gray.700">
+                        <Flex gap={2} mb={4}>
+                            <Input value={url} isReadOnly bg="gray.800" border="none" textOverflow="ellipsis" />
+                            <Button onClick={onCopy} colorScheme={hasCopied ? "green" : "gray"}>
+                                {hasCopied ? "Copied!" : "Copy"}
+                            </Button>
+                        </Flex>
+
+                        {shortUrlData?.qrCode && (
+                            <Flex direction="column" align="center" bg="white" p={4} rounded="lg">
+                                <Image
+                                    src={shortUrlData.qrCode}
+                                    alt="QR Code"
+                                    boxSize="150px"
+                                />
+                                <Button
+                                    size="sm"
+                                    colorScheme="gray"
+                                    mt={3}
+                                    onClick={() => {
+                                        const link = document.createElement('a');
+                                        link.href = shortUrlData.qrCode;
+                                        link.download = `qr-${shortUrlData.urlCode}.png`;
+                                        link.click();
+                                    }}
+                                >
+                                    Download QR
+                                </Button>
+                            </Flex>
+                        )}
+                    </Box>
+                )}
+            </VStack>
         </Box>
     );
 };
