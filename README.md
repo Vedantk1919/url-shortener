@@ -6,13 +6,13 @@ A full-stack MERN application that allows users to shorten URLs, generate QR cod
 
 ## ✨ Features
 
-- ** JWT Authentication** - User registration and login
-- ** URL Shortening** - Convert long URLs to short codes
-- ** QR Code Generation** - Automatically generate QR codes for shortened URLs
-- ** User Dashboard** - View and manage all your shortened URLs
-- ** Responsive UI** - Built with Chakra UI for beautiful, responsive design
-- ** Fast & Lightweight** - Built with Vite + React frontend
-- ** Production Ready** - Deployed on Render + Vercel
+- **JWT Authentication** - User registration and login
+- **URL Shortening** - Convert long URLs to short codes
+- **QR Code Generation** - Automatically generate QR codes for shortened URLs
+- **User Dashboard** - View and manage all your shortened URLs
+- **Responsive UI** - Built with Chakra UI for beautiful, responsive design
+- **Fast & Lightweight** - Built with Vite + React frontend
+- **Production Ready** - Deployed on Render + Vercel
 
 ## 🚀 Live Demo
 
