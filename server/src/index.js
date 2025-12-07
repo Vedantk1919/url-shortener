@@ -9,15 +9,17 @@ app.use(express.json());
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-
     const allowedOrigins = [
-      'http://localhost:5173', 
-      'https://url-shortener-cdprqlg7i-vedants-projects-6f6d5301.vercel.app', 
-      'https://url-shortener-ymc2.onrender.com', 
+      'http://localhost:5173',
+      'https://url-shortener-sand-eight.vercel.app', 
+      'https://url-shortener-ymc2.onrender.com'
     ];
 
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    
+    if (!origin) return callback(null, true);
+
+
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('.vercel.app')) {
       callback(null, true);
     } else {
       console.log('❌ Blocked by CORS:', origin);
@@ -35,7 +37,7 @@ app.get('/', (req, res) => {
 app.use('/api/url', url);
 app.use('/api/auth', authRoutes); 
 
-app.use('/', redirect);
 
+app.use('/', redirect);
 
 module.exports = app;
