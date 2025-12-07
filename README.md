@@ -18,7 +18,7 @@ A full-stack MERN application that allows users to shorten URLs, generate QR cod
 
 Click the image below to watch the demo:
 
-- [![Watch the video]( <img width="1098" height="677" alt="image" src="https://github.com/user-attachments/assets/cdd10148-8d79-417f-9f81-bbe7ce5c4559" />)]([PASTE_LOOM_SHARE_LINK_HERE](https://www.loom.com/share/2b01311c6008455bb36b8ef32f3a404b))
+[![Watch the video](https://github.com/user-attachments/assets/cdd10148-8d79-417f-9f81-bbe7ce5c4559)](https://www.loom.com/share/2b01311c6008455bb36b8ef32f3a404b)
 - **Frontend:** [https://url-shortener-sand-eight.vercel.app/](https://url-shortener-sand-eight.vercel.app/)
 - **Backend API:** [https://url-shortener-ymc2.onrender.com](https://url-shortener-ymc2.onrender.com)
 
