@@ -4,6 +4,9 @@ import Cookies from 'js-cookie';
 
 const AuthContext = createContext();
 
+
+const BACKEND_URL = "https://url-shortener-ymc2.onrender.com";
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -20,48 +23,50 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      //verifyToken();
+      
     } else {
       setLoading(false);
     }
   }, [token]);
 
   const verifyToken = async () => {
-  try {
-    console.log('Verifying token:', token); 
-    const response = await axios.get('/api/auth/verify');
-    console.log('Token verification successful:', response.data); 
-    setUser(response.data.user);
-  } catch (error) {
-    console.log('Token verification failed:', error.response?.data || error.message); 
-    logout();
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      console.log('Verifying token:', token);
+      // 👇 Updated URL
+      const response = await axios.get(`${BACKEND_URL}/api/auth/verify`);
+      console.log('Token verification successful:', response.data);
+      setUser(response.data.user);
+    } catch (error) {
+      console.log('Token verification failed:', error.response?.data || error.message);
+      logout();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const login = async (email, password) => {
     try {
       console.log('Attempting login with:', { email, password });
-      const response = await axios.post('/api/auth/login', { email, password });
+      // 👇 Updated URL
+      const response = await axios.post(`${BACKEND_URL}/api/auth/login`, { email, password });
       console.log('Login response:', response.data);
-      
+
       const { token: newToken, user: userData } = response.data;
-      
+
       setToken(newToken);
       setUser(userData);
       Cookies.set('token', newToken, { expires: 1 });
       axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-      
+
       return { success: true };
     } catch (error) {
       console.log('Login error:', error.response?.data || error.message);
-      const errorMessage = error.response?.data?.error || 
-                          error.response?.data?.message ||
-                          error.message || 
-                          'Login failed';
-      return { 
-        success: false, 
+      const errorMessage = error.response?.data?.error ||
+                           error.response?.data?.message ||
+                           error.message ||
+                           'Login failed';
+      return {
+        success: false,
         error: errorMessage
       };
     }
@@ -70,27 +75,28 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     try {
       console.log('Attempting registration with:', { username, email });
-      const response = await axios.post('/api/auth/register', { 
-        username, email, password 
+      
+      const response = await axios.post(`${BACKEND_URL}/api/auth/register`, {
+        username, email, password
       });
       console.log('Registration response:', response.data);
-      
+
       const { token: newToken, user: userData } = response.data;
-      
+
       setToken(newToken);
       setUser(userData);
       Cookies.set('token', newToken, { expires: 1 });
       axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-      
+
       return { success: true };
     } catch (error) {
       console.log('Registration error:', error.response?.data || error.message);
-      const errorMessage = error.response?.data?.error || 
-                          error.response?.data?.message ||
-                          error.message || 
-                          'Registration failed';
-      return { 
-        success: false, 
+      const errorMessage = error.response?.data?.error ||
+                           error.response?.data?.message ||
+                           error.message ||
+                           'Registration failed';
+      return {
+        success: false,
         error: errorMessage
       };
     }
